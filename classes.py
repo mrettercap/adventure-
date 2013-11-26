@@ -18,8 +18,6 @@ class Error:
         
 class ItemManager:
     items = {}
-    # snuffbox:{
-    #    ownedBy:BedRoom }
 
     def sceneInit(self, objList, owner):
         for obj in objList:
@@ -67,6 +65,23 @@ class Item:
     def describe(self):
         print(self.description)
 
+    def get(self):
+        if self.carryable == True:
+            if ItemManager().determineOwner(self) == PLAYER:
+                print(Error().alreadyCarryingObjectError())
+            elif ItemManager().determineOwner(self) == PLAYER.location:
+                ItemManager().changeOwner(self,PLAYER)
+                print("You pick up the {}.".format(self.name))
+        else:
+            print(Error().uncarryableObjectError())
+
+    def drop(self):
+        if ItemManager().determineOwner(self) == PLAYER:
+            ItemManager().changeOwner(self, PLAYER.location)
+            print("You drop the {}.".format(self.name))
+        else:
+            print(Error().notCarryingObjectError())
+
 class Container(Item):
     def __init__(self, name, initDesc, description, openDesc, state="closed", openable=True, key=None, carryable=True):
         self.openDesc = openDesc
@@ -84,22 +99,6 @@ class Container(Item):
             self.state = 'open'
             print("You open the {}.".format(self.name))
 
-    def get(self):
-        if self.carryable == True:
-            if ItemManager().determineOwner(self) == PLAYER:
-                print(Error().alreadyCarryingObjectError())
-            elif ItemManager().determineOwner(self) == PLAYER.location:
-                ItemManager().changeOwner(self,PLAYER)
-                print("You pick up the {}.".format(self.name))
-        else:
-            print(Error().uncarryableObjectError())
-
-    def drop(self):
-        if ItemManager().determineOwner(self) == PLAYER:
-            ItemManager().changeOwner(self, PLAYER.location)
-            print("You drop the {}.".format(self.name))
-        else:
-            print(Error().notCarryingObjectError())
 
     def describeInner(self):
         if self.state == 'open':
