@@ -25,6 +25,13 @@ class ItemManager:
         for obj in objList:
            self.items[obj.name] = {'self':obj,'ownedBy':owner}
 
+    def changeOwner(self, obj, newOwner):
+        if obj.name in self.items:
+            self.items[obj.name]['ownedBy'] = newOwner
+            return True
+        else:
+            return False
+
     def determineOwner(self, obj):
         if obj.name in self.items:
             return self.items[obj.name]['ownedBy']
