@@ -22,8 +22,7 @@ class Character:
 
 class Player(Character):
     def __init__(self, name, description, inventory):
-        self.name = "player"
-        super().__init__
+        super().__init__(name, description, inventory)
 
 #def move(self, location):
 
@@ -44,7 +43,7 @@ class Container(Item):
         self.state = state
         self.openable = openable
         self.key = key
-        super().__init__
+        super().__init__(name, initDesc, description, carryable)
 
     def open(self):
         if self.state == 'open':
@@ -71,7 +70,7 @@ class Container(Item):
         else:
             print(Error().openBeforeLookingInError())
 
-class Clothing(Object):
+class Clothing(Item):
     def __init__(self, name, initDesc, description, wornDesc, carryable=True, wearable=True, state="unworn"):
         self.name = name
         self.initDesc = initDesc
@@ -81,7 +80,7 @@ class Clothing(Object):
         self.wearable = wearable
         self.state = state
 
-class Scenery(Object):
+class Scenery(Item):
     def __init__(self, name, description):
         self.name = name
         self.description = description
