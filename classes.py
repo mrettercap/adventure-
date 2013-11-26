@@ -28,7 +28,7 @@ class Player(Character):
 #def move(self, location):
 
 
-class Object:
+class Item:
     def __init__(self, name, initDesc, description, carryable):
         self.name = name
         self.initDesc = initDesc
@@ -38,13 +38,13 @@ class Object:
     def describe(self):
         print(self.description)
 
-class Container(Object):
+class Container(Item):
     def __init__(self, name, initDesc, description, openDesc, state="closed", openable=True, key=None, carryable=True):
-        super().__init__
         self.openDesc = openDesc
         self.state = state
         self.openable = openable
         self.key = key
+        super().__init__
 
     def open(self):
         if self.state == 'open':
@@ -99,7 +99,7 @@ class Scene:
                 obj.get()
 
     def describe(self, obj):
-        if obj in self.objects:
+        if obj in self.objects.values():
             obj.describe()
         else:
             print(Error().objectOutOfScopeError())
