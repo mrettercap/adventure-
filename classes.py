@@ -15,14 +15,15 @@ class Error:
         return "You'll have to open it first."
 
 class Character:
-    def __init__(self, name, description, inventory):
+    def __init__(self, name, description, inventory, location):
         self.name = name
         self.description = description
         self.inventory = inventory
+        self.location = location
 
 class Player(Character):
-    def __init__(self, name, description, inventory):
-        super().__init__(name, description, inventory)
+    def __init__(self, name, description, inventory, location):
+        super().__init__(name, description, inventory, location)
 
 #def move(self, location):
 
@@ -60,6 +61,7 @@ class Container(Item):
                 print(Error().alreadyCarryingObjectError())
             else:
                 PLAYER.inventory.append(self)
+                PLAYER.location.objects.remove(self)
                 print("You pick up the {}.".format(self.name))
         else:
             print(Error().uncarryableObjectError())
@@ -98,22 +100,20 @@ class Scene:
                 obj.get()
 
     def describe(self, obj):
-        if obj in self.objects.values():
+        if obj in self.objects:
             obj.describe()
         else:
             print(Error().objectOutOfScopeError())
 
-PLAYER = Player('player','pretty nondescript',[])
+PLAYER = Player('player','pretty nondescript',[],"")
 
 class Bedroom(Scene):
-    objects = {
-                'snuffbox':Container("snuffbox","there is a fine wooden snuff box on the old oak table.","the snuff box is made of mahogany, with a tortoise shell inlay.\nit looks expensive.","the inside of the box is just as opulent as the outside; it's lined with a layer of mother of pearl that shimmers in the light.")
-              }
-    characters = {
-                   'player':PLAYER
-                 }
+    objects = [
+                Container("snuffbox","there is a fine wooden snuff box on the old oak table.","the snuff box is made of mahogany, with a tortoise shell inlay.\nit looks expensive.","the inside of the box is just as opulent as the outside; it's lined with a layer of mother of pearl that shimmers in the light.")
+              ]
 
     def enter(self):
+        PLAYER.location = self
         print("Shit. Saigon.")
         print("You try to shake the cobwebs from your fuzzy mind,")
         print("realizing too late that your head is pounding.")
