@@ -25,6 +25,12 @@ class ItemManager:
         for obj in objList:
            self.items[obj.name] = {'self':obj,'ownedBy':owner}
 
+    def determineOwner(self, obj):
+        if obj.name in self.items:
+            return self.items[obj.name]['ownedBy']
+        else:
+            return False
+
 class Character:
     def __init__(self, name, description, inventory, location):
         self.name = name
