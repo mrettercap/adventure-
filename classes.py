@@ -15,6 +15,15 @@ class Error:
         return "You can't pick that up!"
     def openBeforeLookingInError(self):
         return "You'll have to open it first."
+        
+class ItemManager:
+    items = {}
+    # snuffbox:{
+    #    ownedBy:BedRoom }
+
+    def sceneInit(self, objList, owner):
+        for obj in objList:
+           self.items[obj.name] = {'self':obj,'ownedBy':owner}
 
 class Character:
     def __init__(self, name, description, inventory, location):
@@ -102,6 +111,7 @@ class Scene:
         print("")
         print("This is the list objects function. It hasn't yet")
         print("been implemented.")
+        ItemManager().sceneInit(self.objects, self)
 
     def get(self, obj):
         if (type(obj) == Container and
@@ -136,3 +146,15 @@ class Bedroom(Scene):
 
         super().enter()
 
+
+# itemManager keeps track of item ownership
+# when a scene is initialized, it passes its list of
+# contents to ItemManager, who stores it in its dict
+
+# class ItemManager
+#    def addItem(self, obj, owner):
+#        
+#    def queryOwner(obj)
+#        return obj.owner
+#    def changeLocation(obj,objNewLocation)
+#         obj.location = obj.NewLocation
