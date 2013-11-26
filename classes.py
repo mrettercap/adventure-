@@ -38,6 +38,14 @@ class ItemManager:
         else:
             return False
 
+    def determineScope(self, obj):
+        if obj.name in self.items:
+            if (self.determineOwner(obj) == PLAYER.location or
+                self.determineOwner(obj) == PLAYER):
+                return True
+            else:
+                return False
+
 class Character:
     def __init__(self, name, description, inventory, location):
         self.name = name
