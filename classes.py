@@ -57,9 +57,6 @@ class Player(Character):
     def __init__(self, name, description, inventory, location):
         super().__init__(name, description, inventory, location)
 
-#def move(self, location):
-
-
 class Item:
     def __init__(self, name, initDesc, description, carryable):
         self.name = name
@@ -89,19 +86,17 @@ class Container(Item):
 
     def get(self):
         if self.carryable == True:
-            if self in PLAYER.inventory:
+            if ItemManager().determineOwner(self) == PLAYER:
                 print(Error().alreadyCarryingObjectError())
-            else:
-                PLAYER.inventory.append(self)
-                PLAYER.location.objects.remove(self)
+            elif ItemManager().determineOwner(self) == PLAYER.location:
+                ItemManager().changeOwner(self,PLAYER)
                 print("You pick up the {}.".format(self.name))
         else:
             print(Error().uncarryableObjectError())
 
     def drop(self):
-        if self in PLAYER.inventory:
-            PLAYER.inventory.remove(self)
-            PLAYER.location.objects.append(self)
+        if ItemManager().determineOwner(self) == PLAYER:
+            ItemManager().changeOwner(self, PLAYER.location)
             print("You drop the {}.".format(self.name))
         else:
             print(Error().notCarryingObjectError())
