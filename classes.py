@@ -9,6 +9,8 @@ class Error:
         return "You can't see that."
     def alreadyCarryingObjectError(self):
         return "You're already carrying that!"
+    def notCarryingObjectError(self):
+        return "You're not carrying that!"
     def uncarryableObjectError(self):
         return "You can't pick that up!"
     def openBeforeLookingInError(self):
@@ -65,6 +67,14 @@ class Container(Item):
                 print("You pick up the {}.".format(self.name))
         else:
             print(Error().uncarryableObjectError())
+
+    def drop(self):
+        if self in PLAYER.inventory:
+            PLAYER.inventory.remove(self)
+            PLAYER.location.objects.append(self)
+            print("You drop the {}.".format(self.name))
+        else:
+            print(Error().notCarryingObjectError())
 
     def describeInner(self):
         if self.state == 'open':
