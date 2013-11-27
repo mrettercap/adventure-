@@ -1,6 +1,8 @@
 import sys
 from pyparsing import *
 
+# ===============================================================
+
 class Error:
     def cannotOpenError(self):
         return "You can't open that!"
@@ -24,6 +26,8 @@ class Error:
         return "I don't know how to do that."
     def mustProvideObjectError(self):
         return "You must provide an object."
+
+# ===============================================================
         
 class ItemManager:
     items = {}
@@ -68,6 +72,8 @@ class ItemManager:
             else:
                 return False
 
+# ===============================================================
+
 class Character:
     def __init__(self, name, description, inventory, location):
         self.name = name
@@ -78,6 +84,12 @@ class Character:
 class Player(Character):
     def __init__(self, name, description, inventory, location):
         super().__init__(name, description, inventory, location)
+
+# ===============================================================
+
+PLAYER = Player('player','pretty nondescript',[],"")
+
+# ===============================================================
 
 class Item:
     def __init__(self, name, initDesc, description, carryable):
@@ -164,6 +176,8 @@ class Scenery(Item):
         self.name = name
         self.description = description
 
+# ===============================================================
+
 class Scene:
     def enter(self):
         print("")
@@ -174,7 +188,6 @@ class Scene:
     def describe(self):
         print("There will be a description implemented in this class soon, as well as a printedName.")
 
-PLAYER = Player('player','pretty nondescript',[],"")
 
 class Bedroom(Scene):
     objects = [
@@ -194,6 +207,8 @@ class Bedroom(Scene):
         print("nightstand and sit up, scanning the room.")
 
         super().enter()
+
+# ===============================================================
 
 class Commands:
     def help(self):
@@ -217,8 +232,7 @@ class Parser:
     objects = []
 
     def parse(self, sentence):
-        parseTemplate = Optional(oneOf("describe search get").setResultsName("verb")) + Optional(oneOf("at in").setResultsName("preposition")) + Optional(Word(alphas).setResultsName("object"))
-        #objects = [ ItemManager().items[x] for x in ItemManager().items if x in sentence ]
+        parseTemplate = Optional(oneOf("describe search get").setResultsName("verb")) + Optional(oneOf("north east south west").setResultsName("direction")) + Optional(oneOf("at in").setResultsName("preposition")) + Optional(Word(alphas).setResultsName("object"))
 
         parsedString = parseTemplate.parseString(sentence)
 
@@ -236,8 +250,8 @@ class Parser:
                 PLAYER.location.describe()
         else:
             try:
-                print(ItemManager().tryAction(ItemManager().fetchItem(parsedString['object']),
-                                              parsedString['verb']))
+                ItemManager().tryAction(ItemManager().fetchItem(parsedString['object']),
+                                        parsedString['verb'])
             except:
-                print(Error().objectOutOfScope())
+                print(Error().objectOutOfScopeError())
 
