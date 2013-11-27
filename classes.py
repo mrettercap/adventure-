@@ -128,17 +128,8 @@ class Scene:
         print("been implemented.")
         ItemManager().sceneInit(self.objects, self)
 
-    def get(self, obj):
-        if (type(obj) == Container and
-            obj in self.objects and
-            obj.carryable == True):
-                obj.get()
-
     def describe(self, obj):
-        if obj in self.objects:
-            obj.describe()
-        else:
-            print(Error().objectOutOfScopeError())
+        print("There will be a description implemented in this class soon, as well as a printedName.")
 
 PLAYER = Player('player','pretty nondescript',[],"")
 
@@ -160,16 +151,3 @@ class Bedroom(Scene):
         print("nightstand and sit up, scanning the room.")
 
         super().enter()
-
-
-# itemManager keeps track of item ownership
-# when a scene is initialized, it passes its list of
-# contents to ItemManager, who stores it in its dict
-
-# class ItemManager
-#    def addItem(self, obj, owner):
-#        
-#    def queryOwner(obj)
-#        return obj.owner
-#    def changeLocation(obj,objNewLocation)
-#         obj.location = obj.NewLocation
