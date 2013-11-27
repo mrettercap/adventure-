@@ -1,3 +1,6 @@
+import sys
+from pyparsing import *
+
 class Error:
     def cannotOpenError(self):
         return "You can't open that!"
