@@ -3,6 +3,8 @@ class Error:
         return "You can't open that!"
     def alreadyOpenError(self):
         return "It's already open!"
+    def alreadyClosedError(self):
+        return "It's already closed!"
     def lockedNeedKeyError(self):
         return "You'll need a key to open that."
     def objectOutOfScopeError(self):
@@ -64,7 +66,6 @@ class Item:
 
     def check(func):
         def decorated(*args, **kwargs):
-            print(*args)
             if ItemManager().determineScope(*args) == True:
                 return func(*args, **kwargs)
             else:
@@ -113,10 +114,11 @@ class Container(Item):
 
     @Item.check
     def close(self):
-        if self.state != 'open':
-            print("Closed.")
+        if self.state == 'open':
+            self.state = 'closed'
+            print("You close the {}.".format(self.name))
         else:
-            print("Error.")
+            print(Error().alreadyClosedError())
 
     @Item.check
     def describeInner(self):
