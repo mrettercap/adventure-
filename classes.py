@@ -20,6 +20,10 @@ class Error:
         return "You can't pick that up!"
     def openBeforeLookingInError(self):
         return "You'll have to open it first."
+    def unknownActionError(self):
+        return "I don't know how to do that."
+    def mustProvideObjectError(self):
+        return "You must provide an object."
         
 class ItemManager:
     items = {}
