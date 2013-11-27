@@ -62,14 +62,25 @@ class Item:
         self.description = description
         self.carryable = carryable
 
+    def check(func):
+        def decorated(*args, **kwargs):
+            print(*args)
+            if ItemManager().determineScope(*args) == True:
+                return func(*args, **kwargs)
+            else:
+                print(Error().objectOutOfScopeError())
+        return decorated
+
+    @check
     def describe(self):
         print(self.description)
 
+    @check
     def get(self):
         if self.carryable == True:
             if ItemManager().determineOwner(self) == PLAYER:
                 print(Error().alreadyCarryingObjectError())
-            elif ItemManager().determineOwner(self) == PLAYER.location:
+            else:
                 ItemManager().changeOwner(self,PLAYER)
                 print("You pick up the {}.".format(self.name))
         else:
@@ -90,6 +101,7 @@ class Container(Item):
         self.key = key
         super().__init__(name, initDesc, description, carryable)
 
+    @Item.check
     def open(self):
         if self.state == 'open':
             print(Error().alreadyOpenError())
@@ -99,7 +111,14 @@ class Container(Item):
             self.state = 'open'
             print("You open the {}.".format(self.name))
 
+    @Item.check
+    def close(self):
+        if self.state != 'open':
+            print("Closed.")
+        else:
+            print("Error.")
 
+    @Item.check
     def describeInner(self):
         if self.state == 'open':
             print(self.openDesc)
