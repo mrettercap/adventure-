@@ -175,3 +175,50 @@ class Bedroom(Scene):
         print("nightstand and sit up, scanning the room.")
 
         super().enter()
+
+class Commands:
+    def help(self):
+        print("----")
+        print("Interact with the parser using the following commands:")
+        print("look: Use with an object to describe it; use on its own to describe your surrounds.")
+        print("search <object>: Look inside an object.")
+        print("go <direction>: Move the player in a specific direction.")
+        print("get <object>: Pick up an object.")
+        print("drop <object>: Drop an object you're carrying.")
+        print("open <object>: Open an object.")
+        print("close <object>: Close an object.")
+        print("----")
+    def quit(self):
+        sys.exit()
+
+class Parser:
+    actions = ['look','search','go','get','drop','open','close']
+    directions = ['north','east','south','west']
+    commands = ['help','quit']
+    objects = []
+
+    def parse(self, sentence):
+        parseTemplate = Optional(oneOf("describe search get").setResultsName("verb")) + Optional(oneOf("at in").setResultsName("preposition")) + Optional(Word(alphas).setResultsName("object"))
+        #objects = [ ItemManager().items[x] for x in ItemManager().items if x in sentence ]
+
+        parsedString = parseTemplate.parseString(sentence)
+
+        if not 'verb' in parsedString:
+            print("I don't know how to do that.")
+            return
+
+        if (not 'object' in parsedString and
+           len(list(parsedString)) > 1):
+            print("Must provide an object.")
+            return
+
+        if len(list(parsedString)) == 1:
+            if parsedString['verb'] == "describe":
+                PLAYER.location.describe()
+        else:
+            try:
+                print(ItemManager().tryAction(ItemManager().fetchItem(parsedString['object']),
+                                              parsedString['verb']))
+            except:
+                print("No such object!")
+
