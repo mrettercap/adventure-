@@ -28,6 +28,21 @@ class ItemManager:
         for obj in objList:
            self.items[obj.name] = {'self':obj,'ownedBy':owner}
 
+    def fetchItem(self, name, directObject=True):
+        try: 
+            if directObject == True:
+                return self.items[name]['self']
+            else:
+                return self.items[name]
+        except:
+            return False
+
+    def tryAction(self, item, action):
+        try:
+            getattr(item,action)()
+        except:
+            raise Exception
+            
     def changeOwner(self, obj, newOwner):
         if obj.name in self.items:
             self.items[obj.name]['ownedBy'] = newOwner
@@ -152,7 +167,7 @@ class Scene:
         print("been implemented.")
         ItemManager().sceneInit(self.objects, self)
 
-    def describe(self, obj):
+    def describe(self):
         print("There will be a description implemented in this class soon, as well as a printedName.")
 
 PLAYER = Player('player','pretty nondescript',[],"")
