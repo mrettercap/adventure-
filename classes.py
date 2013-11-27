@@ -223,12 +223,12 @@ class Parser:
         parsedString = parseTemplate.parseString(sentence)
 
         if not 'verb' in parsedString:
-            print("I don't know how to do that.")
+            print(Error().unknownActionError())
             return
 
         if (not 'object' in parsedString and
-           len(list(parsedString)) > 1):
-            print("Must provide an object.")
+            parsedString['verb'] != 'describe'):
+            print(Error().mustProvideObjectError())
             return
 
         if len(list(parsedString)) == 1:
@@ -239,5 +239,5 @@ class Parser:
                 print(ItemManager().tryAction(ItemManager().fetchItem(parsedString['object']),
                                               parsedString['verb']))
             except:
-                print("No such object!")
+                print(Error().objectOutOfScope())
 
